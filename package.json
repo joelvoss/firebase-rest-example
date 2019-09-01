@@ -1,0 +1,82 @@
+{
+  "name": "firebase-rest-example",
+  "description": "Example REST application to demonstate the usage of firebase auth.",
+  "version": "1.0.0",
+  "author": "Joel Voß <mail@joelvoss.com>",
+  "private": true,
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "lint": "eslint ./src --config ./scripts/config/eslintrc.js",
+    "format": "prettier './src/**/*.+(js|svelte|json|less|css|ts|tsx)' --write",
+    "validate": "npm run format && npm run lint",
+    "reset": "rm -rf node_modules package-lock.json build"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "dotenv": "^8.1.0",
+    "firebase": "^6.5.0",
+    "firebase-admin": "^8.4.0",
+    "helmet": "^3.20.1",
+    "polka": "^0.5.2",
+    "read-pkg-up": "^6.0.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^3.0.4",
+    "lint-staged": "^9.2.5",
+    "nodemon": "^1.19.1",
+    "prettier": "^1.18.2"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "./src"
+    ],
+    "ext": "js"
+  },
+  "eslintConfig": {
+    "extends": "./scripts/config/eslintrc.js"
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "build/",
+    "__fixtures__/"
+  ],
+  "prettier": {
+    "printWidth": 80,
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "jsxBracketSameLine": false,
+    "arrowParens": "avoid"
+  },
+  "prettierIgnore": [
+    "node_modules/",
+    "build/"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,less,css,ts,tsx}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  }
+}

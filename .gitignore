@@ -1,0 +1,27 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Misc
+.DS_Store
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+/node_modules
+
+# Testing
+/coverage
+__tests__
+__mocks__
+__snapshots__
+
+# Secrets
+secret/*
+!secret/.gitkeep
+
+# App.yaml (as it contains secrets
+app.yaml
+
+# Does more harm than good
+package-lock.json
