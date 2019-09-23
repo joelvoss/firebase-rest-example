@@ -70,7 +70,7 @@ auth.post(`/signin`, async (req, res) => {
 });
 
 /**
- * POST - Confirm a password reset event.
+ * GET - Confirm a password reset event.
  * @param {String} body.actionCode Firebase action code
  * @param {String} body.password New password
  * @return {String}
