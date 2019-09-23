@@ -69,4 +69,54 @@ auth.post(`/signin`, async (req, res) => {
   }
 });
 
+/**
+ * POST - Confirm a password reset event.
+ * @param {String} body.actionCode Firebase action code
+ * @param {String} body.password New password
+ * @return {String}
+ */
+auth.get(`/password-reset`, async (req, res) => {
+  const actionCode = req.params.actionCode || req.query.actionCode;
+  const password = req.params.password || req.query.password;
+
+  if (!actionCode || !password) {
+    return send(res, 400, 'insufficent-parameters');
+  }
+
+  let email;
+  try {
+    email = await client.auth().verifyPasswordResetCode(actionCode);
+  } catch (err) {
+    logger.error(err.message, { actionCode });
+    return send(res, 400, err.message);
+  }
+
+  try {
+    await client.auth().confirmPasswordReset(actionCode, password);
+    return send(res, 200, `Password reset for ${email} verified.`);
+  } catch (err) {
+    logger.error(err.message, { actionCode, password });
+    return send(res, 400, err.message);
+  }
+});
+
+/**
+ * POST - Send a password reset email to the users email address.
+ * @param {String} body.email Email address
+ * @return {String}
+ */
+auth.post(`/password-reset`, async (req, res) => {
+  if (!req.body.email) {
+    return send(res, 400, 'insufficent-parameters');
+  }
+
+  try {
+    await client.auth().sendPasswordResetEmail(req.body.email);
+    return send(res, 200, 'ok');
+  } catch (err) {
+    logger.error(err.message, req.body);
+    return send(res, 400, err.message);
+  }
+});
+
 exports.auth = auth;
