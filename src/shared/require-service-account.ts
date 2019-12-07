@@ -1,13 +1,11 @@
-const fs = require('fs');
-const { logger } = require('./logger');
+import fs from 'fs';
+import { logger } from './logger';
 
 /**
  * Require a service account specified by its `keyFileName`.
  * The service account has to be stored inside the `/secret` folder.
- * @param {String} keyFileName Name of the service account keyfile.
- * @return {Object} Required file.
  */
-function requireServiceAccount(keyFileName) {
+export function requireServiceAccount(keyFileName: string) {
   if (!keyFileName) {
     logger.error('keyFileName missing.');
   }
@@ -39,5 +37,3 @@ function requireServiceAccount(keyFileName) {
     throw new Error(err.msg);
   }
 }
-
-exports.requireServiceAccount = requireServiceAccount;

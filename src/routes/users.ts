@@ -1,10 +1,10 @@
-const polka = require('polka');
-const { send } = require('../shared/send-type');
-const { isAuthenticated } = require('../shared/is-authenticated');
-const { admin } = require('../shared/firebase');
-const { logger } = require('../shared/logger');
+import express from 'express';
+import { isAuthenticated } from '../shared/is-authenticated';
+import { admin } from '../shared/firebase';
+import { logger } from '../shared/logger';
+import { auth } from 'firebase-admin';
 
-const users = polka();
+const router = express.Router();
 
 /**
  * GET - All users
@@ -12,10 +12,10 @@ const users = polka();
  * @param {String} query.nextPageToken Pagination token
  * @return {Array} Array of user records
  */
-users.use(isAuthenticated).get(`/`, async (req, res) => {
+router.get(`/`, isAuthenticated, async (req, res) => {
   try {
     const data = await admin.auth().listUsers(1000, req.query.nextPageToken);
-    const users = data.users.map(usr => ({
+    const users = data.users.map((usr: auth.UserRecord) => ({
       uid: usr.uid,
       email: usr.email,
       verified: usr.emailVerified,
@@ -23,10 +23,11 @@ users.use(isAuthenticated).get(`/`, async (req, res) => {
       lastSignInTime: usr.metadata.lastSignInTime,
       creationTime: usr.metadata.creationTime,
     }));
-    send(res, 200, users);
+    logger.info(`/users - List ${users.length}/1000 users`);
+    return res.status(200).json(users);
   } catch (err) {
     logger.error(err.message, req.body);
-    return send(res, 400, err.message);
+    return res.status(400).json(err.message);
   }
 });
 
@@ -35,7 +36,7 @@ users.use(isAuthenticated).get(`/`, async (req, res) => {
  * Requires authentication
  * @return {Object} User record
  */
-users.use(isAuthenticated).get(`/:userId`, async (req, res) => {
+router.get(`/:userId`, isAuthenticated, async (req, res) => {
   try {
     const userRecord = await admin.auth().getUser(req.params.userId);
     const user = {
@@ -46,11 +47,12 @@ users.use(isAuthenticated).get(`/:userId`, async (req, res) => {
       lastSignInTime: userRecord.metadata.lastSignInTime,
       creationTime: userRecord.metadata.creationTime,
     };
-    return send(res, 200, user);
+    logger.info(`/:userId - Get user '${user.uid}'`);
+    return res.status(200).json(user);
   } catch (err) {
     logger.error(err.message, req.body);
-    return send(res, 400, err.message);
+    return res.status(400).json(err.message);
   }
 });
 
-exports.users = users;
+export const users = router;

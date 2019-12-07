@@ -379,10 +379,7 @@ const animals = [
 
 /**
  * Generate a random display name.
- * @return {String} Display name
  */
-function generateDisplayName() {
-  return `Anonymous ${animals[Math.floor(Math.random() * animals.length)]}`;
+export function generateDisplayName(pool: string[] = animals) {
+  return `Anonymous ${pool[Math.floor(Math.random() * pool.length)]}`;
 }
-
-exports.generateDisplayName = generateDisplayName;

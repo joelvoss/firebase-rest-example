@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const readPkgUp = require('read-pkg-up');
-const { path: pkgPath } = readPkgUp.sync({
+import fs from 'fs';
+import path from 'path';
+import readPkgUp from 'read-pkg-up';
+const rpu = readPkgUp.sync({
   cwd: fs.realpathSync(process.cwd()),
 });
 
@@ -21,13 +21,13 @@ if (fs.existsSync('.env')) {
  * @return {object}
  */
 process.env = Object.keys(process.env).reduce(
-  (env, key) => {
+  (env: { [key: string]: string | undefined }, key) => {
     env[key] = process.env[key];
     return env;
   },
   {
     // Defaults
-    ROOT: path.dirname(pkgPath),
+    ROOT: path.dirname(rpu!.path),
     LOG: process.env.LOG || 'info',
     NODE_ENV: process.env.NODE_ENV || 'development',
     PORT: process.env.PORT || '3000',

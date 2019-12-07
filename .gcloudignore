@@ -25,19 +25,20 @@ README.md
 # app.yaml files, since GAE already knows the configuration based on our
 # deployment
 app.yaml
-*.yaml
 
 # Dependencies
-/node_modules
+node_modules/
 
 # Testing
-/coverage
-__tests__
-__mocks__
-__snapshots__
+coverage/
+__tests__/
+__mocks__/
+__snapshots__/
 
-# Helper scripts, which aren't needed
-/scripts
+# Production
+build/
+dist/
 
 # Does more harm than good
 package-lock.json
+yarn.lock

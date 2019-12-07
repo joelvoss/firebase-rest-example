@@ -8,20 +8,21 @@ yarn-debug.log*
 yarn-error.log*
 
 # Dependencies
-/node_modules
+node_modules/
 
 # Testing
-/coverage
-__tests__
-__mocks__
-__snapshots__
+coverage/
+
+# Production
+build/
+dist/
 
 # Secrets
-secret/*
+secret/**
+secrets/**
 !secret/.gitkeep
-
-# App.yaml (as it contains secrets
-app.yaml
+!secrets/.gitkeep
 
 # Does more harm than good
 package-lock.json
+yarn.lock
